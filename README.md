@@ -74,10 +74,10 @@ public class OrderDao extends TestBaseDao {
 ----
 ### 二、具体方法的使用
 
-设置参数方法：
+#### 设置参数方法：<br>
 param()/paramBatch()<br>
 
-crud方法：
+#### crud方法：<br>
 1、single()--查询单条数据，以实体形式返回<br>
 2、singleMap()--查询单条数据，以map形式返回<br>
 3、list()--查询多条数据，以List形式返回<br>
@@ -92,7 +92,7 @@ crud方法：
 12、insertBatch()--批量插入，返回插入的数据的Id，配合paramBatch方法使用<br>
 13、update()--修改、删除，返回值为1表示成功<br>
 14、updateBatch()--批量修改、删除，返回值为1表示成功，配合paramBatch方法使用<br><br>
-----
+
 <br><br>
 注：<br>
 1、BaseDao和BaseConnection都实现了SQL执行异常的监控，该框架目前只实现了log形式的警报，可以针对ExceptionUtil做自定制<br>

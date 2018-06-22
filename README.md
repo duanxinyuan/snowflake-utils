@@ -80,18 +80,18 @@ param()/paramBatch()<br>
 #### crud方法：<br>
 * 1、single()--查询单条数据，以实体形式返回<br>
 * 2、singleMap()--查询单条数据，以map形式返回<br>
-3、list()--查询多条数据，以List形式返回<br>
-4、listArray()-查询多条数据，以List<Object[]>形式返回<br>
-5、listMap()--查询多条数据，以List<Map<String, Object>>形式返回<br>
-6、keyedMap()--查询指定列的数据，返回Map<String, Map<String, Object>>，列名作为该Map的键，Map中的值为对应行数据转换的键值对，键为列名<br>
-7、columnList()--查询指定列的数据，以List形式返回<br>
-8、firstRowMap()--查询满足条件的第一条记录，以Map形式返回<br>
-9、firstRowArray()--查询满足条件的第一条记录，以Object[]形式返回<br>
-10、pagination()--查询分页数据<br>
-11、insert()--插入数据，返回插入的数据的Id<br>
-12、insertBatch()--批量插入，返回插入的数据的Id，配合paramBatch方法使用<br>
-13、update()--修改、删除，返回值为1表示成功<br>
-14、updateBatch()--批量修改、删除，返回值为1表示成功，配合paramBatch方法使用<br><br>
+* 3、list()--查询多条数据，以List形式返回<br>
+* 4、listArray()-查询多条数据，以List<Object[]>形式返回<br>
+* 5、listMap()--查询多条数据，以List<Map<String, Object>>形式返回<br>
+* 6、keyedMap()--查询指定列的数据，返回Map<String, Map<String, Object>>，列名作为该Map的键，Map中的值为对应行数据转换的键值对，键为列名<br>
+* 7、columnList()--查询指定列的数据，以List形式返回<br>
+* 8、firstRowMap()--查询满足条件的第一条记录，以Map形式返回<br>
+* 9、firstRowArray()--查询满足条件的第一条记录，以Object[]形式返回<br>
+* 10、pagination()--查询分页数据<br>
+* 11、insert()--插入数据，返回插入的数据的Id<br>
+* 12、insertBatch()--批量插入，返回插入的数据的Id，配合paramBatch方法使用<br>
+* 13、update()--修改、删除，返回值为1表示成功<br>
+* 14、updateBatch()--批量修改、删除，返回值为1表示成功，配合paramBatch方法使用<br><br>
 
 <br><br>
 注：<br>

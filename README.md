@@ -78,8 +78,8 @@ public class OrderDao extends TestBaseDao {
 param()/paramBatch()<br>
 
 #### crud方法：<br>
-*1、single()--查询单条数据，以实体形式返回<br>
-*2、singleMap()--查询单条数据，以map形式返回<br>
+* 1、single()--查询单条数据，以实体形式返回<br>
+* 2、singleMap()--查询单条数据，以map形式返回<br>
 3、list()--查询多条数据，以List形式返回<br>
 4、listArray()-查询多条数据，以List<Object[]>形式返回<br>
 5、listMap()--查询多条数据，以List<Map<String, Object>>形式返回<br>

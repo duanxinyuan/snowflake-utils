@@ -1,4 +1,4 @@
-# Apache-Dbutils-dxy
+# Apache-Dbutils
 ## 基于Apache开源的Dbutils和阿里巴巴开源的Druid进行封装的DBUtils，全自定义SQL风格
 
 ## 纯Sql请求DB的方式<br><br>

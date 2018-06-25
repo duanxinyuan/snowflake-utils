@@ -1,6 +1,6 @@
 package com.dxy.apache.dbutils.dao;
 
-import com.dxy.apache.dbutils.util.ExceptionUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.dbutils.QueryRunner;
 
 import java.sql.SQLException;
@@ -11,6 +11,7 @@ import java.sql.SQLException;
  * @author dxy
  * 2018/4/24 20:15
  */
+@Slf4j
 public class BaseDao {
 
     private BaseDataSource baseDataSource;
@@ -50,7 +51,7 @@ public class BaseDao {
         try {
             return new BaseConnection(getBaseDataSource().getDataSource().getConnection());
         } catch (SQLException e) {
-            ExceptionUtil.disposeError(e);
+            log.error("getConnection error", e);
         }
         return null;
     }

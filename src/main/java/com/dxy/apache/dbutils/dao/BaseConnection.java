@@ -1,8 +1,8 @@
 package com.dxy.apache.dbutils.dao;
 
 import com.alibaba.druid.pool.DruidPooledConnection;
-import com.dxy.apache.dbutils.util.ExceptionUtil;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -12,10 +12,15 @@ import java.util.List;
  * @author dxy
  * 2018/4/24 20:15
  */
+@Slf4j
 public class BaseConnection {
 
-    private DruidPooledConnection connection;//JDBC连接，使用事物时需要传入
-    private boolean isTransactionExcuting = false;//事务是否正在执行
+    /**
+     * 事务是否正在执行
+     */
+    private boolean isTransactionExcuting = false;
+
+    private DruidPooledConnection connection;
     private List<ConnectionListener> rollbackListeners;
     private List<ConnectionListener> commitListeners;
 
@@ -67,7 +72,7 @@ public class BaseConnection {
                 connection.setAutoCommit(false);
                 isTransactionExcuting = true;
             } catch (Exception e) {
-                ExceptionUtil.disposeError(e);//处理异常
+                log.error("connection begin transaction error", e);
             }
         }
     }
@@ -86,7 +91,7 @@ public class BaseConnection {
                     }
                 }
             } catch (Exception e) {
-                ExceptionUtil.disposeError(e);//处理异常
+                log.error("connection rollback error", e);
             } finally {
                 close();
             }
@@ -107,7 +112,7 @@ public class BaseConnection {
                     }
                 }
             } catch (Exception e) {
-                ExceptionUtil.disposeError(e);//处理异常
+                log.error("connection commit error", e);
             } finally {
                 close();
             }
@@ -122,7 +127,7 @@ public class BaseConnection {
                     connection.close();
                 }
             } catch (SQLException e) {
-                ExceptionUtil.disposeError(e);//处理异常
+                log.error("connection close error", e);
             }
         }
     }

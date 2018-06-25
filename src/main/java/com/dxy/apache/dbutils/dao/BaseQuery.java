@@ -2,9 +2,9 @@ package com.dxy.apache.dbutils.dao;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.dxy.apache.dbutils.result.Pagination;
-import com.dxy.apache.dbutils.util.ExceptionUtil;
-import com.dxy.apache.dbutils.util.ReflectUtil;
+import com.dxy.common.util.ReflectUtil;
 import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.*;
@@ -20,16 +20,45 @@ import java.util.*;
  * @author dxy
  * 2018/4/24 20:15
  */
+@Slf4j
 public class BaseQuery<T> {
-    private String sql;//数据Sql
-    private String countSql;//总数目Sql
-    private int pageNo;//页码
-    private int pageSize;//单页数据条数
+    /**
+     * 数据Sql
+     */
+    private String sql;
+    /**
+     * 总数目Sql
+     */
+    private String countSql;
+    /**
+     * 页码
+     */
+    private int pageNo;
+    /**
+     * 单页数据条数
+     */
+    private int pageSize;
+    /**
+     * 返回的数据类型
+     */
     private Class<T> cls;
-    private BaseConnection connection;//JDBC连接，使用事物时需要传入
-    private List<Object> params = new ArrayList<>();//Sql执行的参数
-    private List<Object[]> paramsBatch = new ArrayList<>();//Sql批量执行的参数
-    private DruidDataSource dataSource;//连接池
+
+    /**
+     * JDBC连接，使用事物时需要传入
+     */
+    private BaseConnection connection;
+    /**
+     * Sql执行的参数
+     */
+    private List<Object> params = new ArrayList<>();
+    /**
+     * Sql批量执行的参数
+     */
+    private List<Object[]> paramsBatch = new ArrayList<>();
+    /**
+     * 连接池
+     */
+    private DruidDataSource dataSource;
 
 
     BaseQuery(String sql, DruidDataSource dataSource) {
@@ -144,14 +173,14 @@ public class BaseQuery<T> {
                 t = new QueryRunner(dataSource).query(sql, resultSetHandler, (Object[]) convertParam());
             }
         } catch (SQLException e) {
-            disposeError(e);//处理异常
+            log.error("single error", e);
         }
         return t;
     }
 
     /**
      * 查询单条数据，以map形式返回
-     * @return Map<String, V>
+     * @return Map<String               ,                               V>
      */
     public Map<String, T> singleMap() {
         Map<String, T> map = Maps.newHashMap();
@@ -163,7 +192,7 @@ public class BaseQuery<T> {
                 map = new QueryRunner(dataSource).query(sql, resultSetHandler, (Object[]) convertParam());
             }
         } catch (SQLException e) {
-            disposeError(e);//处理异常
+            log.error("singleMap error", e);
         }
         return map;
     }
@@ -187,14 +216,14 @@ public class BaseQuery<T> {
                 vs = new QueryRunner(dataSource).query(sql, resultSetHandler, (Object[]) convertParam());
             }
         } catch (SQLException e) {
-            disposeError(e);//处理异常
+            log.error("list error", e);
         }
         return vs;
     }
 
     /**
      * 查询单条数据，以List<Object[]>形式返回
-     * @return List<Object[]>
+     * @return List<Object               [               ]>
      */
     public List<Object[]> listArray() {
         List<Object[]> objects = new ArrayList<>();
@@ -206,14 +235,14 @@ public class BaseQuery<T> {
                 objects = new QueryRunner(dataSource).query(sql, resultSetHandler, (Object[]) convertParam());
             }
         } catch (Exception e) {
-            disposeError(e);//处理异常
+            log.error("listArray error", e);
         }
         return objects;
     }
 
     /**
      * 查询单条数据，以List<Map<String, Object>>形式返回
-     * @return List<Map<String, Object>>
+     * @return List<Map               <               String               ,                               Object>>
      */
     public List<Map<String, Object>> listMap() {
         List<Map<String, Object>> vs = new ArrayList<>();
@@ -225,14 +254,14 @@ public class BaseQuery<T> {
                 vs = new QueryRunner(dataSource).query(sql, resultSetHandler, (Object[]) convertParam());
             }
         } catch (Exception e) {
-            disposeError(e);//处理异常
+            log.error("listMap error", e);
         }
         return vs;
     }
 
     /**
      * 查询指定列的数据，列名作为该Map的键，Map中的值为对应行数据转换的键值对，键为列名
-     * @return Map<String, Map<String, Object>>
+     * @return Map<String               ,                               Map               <               String               ,                               Object>>
      */
     public Map<String, Map<String, Object>> keyedMap() {
         Map<String, Map<String, Object>> mapMap = Maps.newHashMap();
@@ -244,7 +273,7 @@ public class BaseQuery<T> {
                 mapMap = new QueryRunner(dataSource).query(sql, resultSetHandler, (Object[]) convertParam());
             }
         } catch (Exception e) {
-            disposeError(e);//处理异常
+            log.error("keyedMap error", e);
         }
         return mapMap;
     }
@@ -263,14 +292,14 @@ public class BaseQuery<T> {
                 vs = new QueryRunner(dataSource).query(sql, resultSetHandler, (Object[]) convertParam());
             }
         } catch (Exception e) {
-            disposeError(e);//处理异常
+            log.error("columnList error", e);
         }
         return vs;
     }
 
     /**
      * 查询满足条件的第一条记录，以Map形式返回
-     * @return Map<String, Object>
+     * @return Map<String               ,                               Object>
      */
     public Map<String, Object> firstRowMap() {
         Map<String, Object> objectMap = Maps.newHashMap();
@@ -282,7 +311,7 @@ public class BaseQuery<T> {
                 objectMap = new QueryRunner(dataSource).query(sql, resultSetHandler, (Object[]) convertParam());
             }
         } catch (Exception e) {
-            disposeError(e);//处理异常
+            log.error("firstRowMap error", e);
         }
         return objectMap;
     }
@@ -301,7 +330,7 @@ public class BaseQuery<T> {
                 objects = new QueryRunner(dataSource).query(sql, resultSetHandler, (Object[]) convertParam());
             }
         } catch (Exception e) {
-            disposeError(e);//处理异常
+            log.error("firstRowArray error", e);
         }
         return objects;
     }
@@ -343,21 +372,8 @@ public class BaseQuery<T> {
                 return new QueryRunner(dataSource).insert(sql, resultSetHandler, (Object[]) convertParam());
             }
         } catch (Exception e) {
-            disposeError(e);//处理异常
+            log.error("insert error", e);
             return null;
-        }
-    }
-
-
-    /**
-     * 插入，返回插入的数据的   插入错误日志用  不会 catch exception
-     */
-    public void insert2() throws Exception {
-        ScalarHandler<Long> resultSetHandler = new ScalarHandler<>();
-        if (connection != null) {
-            new QueryRunner().insert(connection.getConnection(), sql, resultSetHandler, (Object[]) convertParam());
-        } else {
-            new QueryRunner(dataSource).insert(sql, resultSetHandler, (Object[]) convertParam());
         }
     }
 
@@ -378,7 +394,7 @@ public class BaseQuery<T> {
                 return new QueryRunner(dataSource).insertBatch(sql, resultSetHandler, objects);
             }
         } catch (Exception e) {
-            disposeError(e);//处理异常
+            log.error("insertBatch error", e);
         }
         return null;
     }
@@ -395,7 +411,7 @@ public class BaseQuery<T> {
                 return new QueryRunner(dataSource).update(sql, (Object[]) convertParam());
             }
         } catch (Exception e) {
-            disposeError(e);//处理异常
+            log.error("update error", e);
             return 0;
         }
     }
@@ -416,7 +432,7 @@ public class BaseQuery<T> {
                 return new QueryRunner(dataSource).batch(sql, objects);
             }
         } catch (Exception e) {
-            disposeError(e);//处理异常
+            log.error("updateBatch error", e);
             return null;
         }
     }
@@ -428,16 +444,6 @@ public class BaseQuery<T> {
         return cls == String.class || cls == Integer.class || cls == Short.class || cls == Float.class || cls == Double.class
                 || cls == Boolean.class || cls == Long.class || cls == CharSequence.class || cls == Byte.class || cls == BigDecimal.class
                 || cls == BigInteger.class || cls == Date.class || cls == Enum.class;
-    }
-
-    /**
-     * 调用异常日志接口 创建日志
-     */
-    public void disposeError(Exception e) {
-        if (connection != null && connection.isTransactionExcuting()) {
-            connection.rollback();
-        }
-        ExceptionUtil.disposeError(e);
     }
 
 }

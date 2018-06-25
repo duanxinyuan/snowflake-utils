@@ -1,7 +1,7 @@
 package com.dxy.apache.dbutils.dao;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.dxy.apache.dbutils.util.ExceptionUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
 
@@ -11,6 +11,7 @@ import java.sql.SQLException;
  * @author dxy
  * 2018/4/24 20:15
  */
+@Slf4j
 public class BaseDataSource {
 
     //schema名，必须设置
@@ -120,7 +121,7 @@ public class BaseDataSource {
             druidDataSource.setMaxPoolPreparedStatementPerConnectionSize(20);
             druidDataSource.init();
         } catch (SQLException e) {
-            ExceptionUtil.disposeError(e);
+            log.error("getDataSource error", e);
         }
         return druidDataSource;
     }

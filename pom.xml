@@ -3,17 +3,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <groupId>com.github.duanxinyuan</groupId>
+    <artifactId>util-snowflake</artifactId>
+    <version>${snowflake-utils.version}</version>
+    <packaging>jar</packaging>
 
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
         <version>9</version>
     </parent>
-
-    <groupId>com.github.duanxinyuan</groupId>
-    <artifactId>library-apache-dbutils</artifactId>
-    <version>1.0.0</version>
-    <packaging>jar</packaging>
 
     <distributionManagement>
         <snapshotRepository>
@@ -35,14 +34,14 @@
         </license>
     </licenses>
 
-    <name>Apache-Dbutils</name>
-    <url>https://github.com/duanxinyuan/Apache-Dbutils</url>
-    <description>基于Apache开源的Dbutils和阿里巴巴开源的Druid进行封装的DBUtils，全自定义SQL风格</description>
+    <name>snowflake-utils</name>
+    <url>https://github.com/duanxinyuan/snowflake-utils</url>
+    <description>雪花Id（分布式Id）算法工具库</description>
 
     <scm>
-        <connection>scm:git:https://github.com/duanxinyuan/Apache-Dbutils.git</connection>
-        <developerConnection>scm:git:https://github.com/duanxinyuan/Apache-Dbutils.git</developerConnection>
-        <url>https://github.com/duanxinyuan/Apache-Dbutils</url>
+        <connection>scm:git:https://github.com/duanxinyuan/snowflake-utils.git</connection>
+        <developerConnection>scm:git:https://github.com/duanxinyuan/snowflake-utils.git</developerConnection>
+        <url>https://github.com/duanxinyuan/snowflake-utils</url>
     </scm>
 
     <developers>
@@ -54,63 +53,66 @@
     </developers>
 
     <properties>
+        <snowflake-utils.version>1.0.0</snowflake-utils.version>
+
+        <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <maven.test.skip>true</maven.test.skip>
+
+        <junit.version>4.12</junit.version>
+
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <flatten-maven-plugin.version>1.1.0</flatten-maven-plugin.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.github.duanxinyuan</groupId>
-            <artifactId>library-common-util</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.1.5</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-dbutils</groupId>
-            <artifactId>commons-dbutils</artifactId>
-            <version>1.6</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version>3.2.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.25</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>25.0-jre</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.20</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>${flatten-maven-plugin.version}</version>
+                <configuration>
+                    <!--是否更新pom文件-->
+                    <updatePomFile>true</updatePomFile>
+                    <!--仅解析变量版本，sha1和变更列表。保留其他所有内容。有关更多详细信息，请参见Maven CI Friendly。-->
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

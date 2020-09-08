@@ -1,5 +1,10 @@
 package com.dxy.library.snowflake;
 
+import lombok.extern.slf4j.Slf4j;
+
+import java.lang.management.ManagementFactory;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 
@@ -19,6 +24,7 @@ import java.util.concurrent.locks.LockSupport;
  * 经测试，SnowFlake每秒能够产生26万ID左右。
  * @author Twitter
  */
+@Slf4j
 final class SnowflakeIdWorker {
 
     /**
@@ -80,23 +86,25 @@ final class SnowflakeIdWorker {
     /**
      * 可以接受的时间回拨最大毫秒数
      */
-    private long maxBackwardMillis = 10;
-    //==============================Constructors=====================================
+    private long maxBackwardMillis = 1000;
 
-    /**
-     * 构造函数
-     * @param workerId 工作ID (0~31)
-     * @param datacenterId 数据中心ID (0~31)
-     */
-    SnowflakeIdWorker(long workerId, long datacenterId) {
+    SnowflakeIdWorker() {
+        long datacenterId = getDatacenterId(maxDatacenterId);
+        long workerId = getWorkerId(datacenterId, this.maxWorkerId);
+        checkAndSetWorkerIdAndDatacenterId(workerId, datacenterId);
+    }
+
+    private void checkAndSetWorkerIdAndDatacenterId(long workerId, long datacenterId) {
         if (workerId > maxWorkerId || workerId < 0) {
-            throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
+            throw new SnowflakeException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
         }
         if (datacenterId > maxDatacenterId || datacenterId < 0) {
-            throw new IllegalArgumentException(String.format("datacenter Id can't be greater than %d or less than 0", maxDatacenterId));
+            throw new SnowflakeException(String.format("datacenter Id can't be greater than %d or less than 0", maxDatacenterId));
         }
         this.workerId = workerId;
         this.datacenterId = datacenterId;
+        log.info("snowflake workerId: {}", workerId);
+        log.info("snowflake datacenterId: {}", datacenterId);
     }
     // ==============================Methods==========================================
 
@@ -114,7 +122,7 @@ final class SnowflakeIdWorker {
                 timestamp = System.currentTimeMillis();
             }
             if (timestamp < lastTimestamp) {
-                throw new RuntimeException(String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds", lastTimestamp - timestamp));
+                throw new SnowflakeException(String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds", lastTimestamp - timestamp));
             }
         }
         //如果是同一时间生成的，则进行毫秒内序列
@@ -136,6 +144,53 @@ final class SnowflakeIdWorker {
         lastTimestamp = timestamp;
         //移位并通过或运算拼到一起组成64位的ID
         return ((timestamp - twepoch) << timestampLeftShift) | (datacenterId << datacenterIdShift) | (workerId << workerIdShift) | sequence;
+    }
+
+    /**
+     * 获取 maxWorkerId
+     */
+    protected static long getWorkerId(long dataCenterId, long maxWorkerId) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(dataCenterId);
+        //用当前JVM进程的PID作为workerId
+        String name = ManagementFactory.getRuntimeMXBean().getName();
+        if (!name.isEmpty()) {
+            //获取jvm pid
+            stringBuilder.append(name.split("@")[0]);
+        }
+        //MAC + PID 的 hashcode 获取16个低位
+        return (stringBuilder.toString().hashCode() & 0xffff) % (maxWorkerId + 1);
+    }
+
+    /**
+     * 数据标识id部分
+     */
+    protected static long getDatacenterId(long maxDatacenterId) {
+        long id = 0L;
+        try {
+            InetAddress ip = InetAddress.getLocalHost();
+            NetworkInterface network = NetworkInterface.getByInetAddress(ip);
+            if (network == null) {
+                id = 1L;
+            } else {
+                byte[] mac = network.getHardwareAddress();
+                if (mac != null) {
+                    id = ((0x000000FF & (long) mac[mac.length - 1]) | (0x0000FF00 & (((long) mac[mac.length - 2]) << 8))) >> 6;
+                    id = id % (maxDatacenterId + 1);
+                }
+            }
+        } catch (Exception e) {
+            log.error(" getDatacenterId error", e);
+        }
+        return id;
+    }
+
+    public long getWorkerId() {
+        return workerId;
+    }
+
+    public long getDatacenterId() {
+        return datacenterId;
     }
 
 }

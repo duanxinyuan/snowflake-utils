@@ -1,28 +1,9 @@
-# 雪花Id（分布式Id）算法工具库
-
-
-## Twitter雪花算法-普通版
-
-Twitter的雪花算法，用于生成分布式Id
-
-### Maven依赖
-
-```xml
-<dependency>
-    <groupId>com.github.duanxinyuan</groupId>
-    <artifactId>util-snowflake</artifactId>
-</dependency>
-```
-
-* Twitter雪花算法工具类：com.dxy.library.util.snowflake.SnowflakeIdUtils
-
-## <font color=red>Twitter雪花算法-完美版</font>
+# Twitter雪花算法-完美版
 
 * **增加了使用Redis分配workerId和datacenterId的逻辑，确保不会重复**
 * **最多可以分配32*32=1024个workerId+datacenterId的组合**
 
-### Maven依赖
-
+## Maven依赖
 ```xml
 <dependency>
     <groupId>com.github.duanxinyuan</groupId>
@@ -32,9 +13,9 @@ Twitter的雪花算法，用于生成分布式Id
 
 * Twitter雪花算法工具类：SnowflakeIdUtils
 
-### 配置示例
+## 配置示例
 
-#### properties 配置示例
+### properties 配置示例
 
 ```properties
 #雪花算法模块名
@@ -47,7 +28,7 @@ cache.redis.nodes.snowflake=127.0.0.1:6380
 cache.redis.password.snowflake=123456
 ```
 
-#### yaml 配置示例
+### yaml 配置示例
 
 ```yaml
 snowflake:
@@ -66,7 +47,7 @@ cache:
             snowflake: 123456
 ```
 
-### 使用示例
+## 使用示例
 
 ```java
 import com.dxy.library.json.jackson.JacksonUtil;

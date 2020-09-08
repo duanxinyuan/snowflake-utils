@@ -14,7 +14,7 @@ Twitter的雪花算法，用于生成分布式Id
 </dependency>
 ```
 
-* Twitter雪花算法工具类：com.dxy.library.util.snowflake.SnowflakeIdUtils
+* Twitter雪花算法工具类：SnowflakeIdUtils
 
 ## <font color=red>Twitter雪花算法-完美版</font>
 

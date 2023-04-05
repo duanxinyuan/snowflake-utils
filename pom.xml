@@ -7,7 +7,6 @@
     <artifactId>util-snowflake-parent</artifactId>
     <version>${util-snowflake.version}</version>
     <modules>
-        <module>util-config</module>
         <module>util-snowflake-prefect</module>
         <module>util-snowflake</module>
     </modules>
@@ -39,9 +38,9 @@
     </developers>
 
     <properties>
-        <util-snowflake.version>1.2.0</util-snowflake.version>
+        <util-snowflake.version>1.3.0</util-snowflake.version>
         <json-jackson.version>1.1.0</json-jackson.version>
-        <cache-redis.version>1.2.0</cache-redis.version>
+        <cache-redis.version>1.3.0</cache-redis.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -59,7 +58,7 @@
         <commons-configuration2.version>2.7</commons-configuration2.version>
 
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <flatten-maven-plugin.version>1.1.0</flatten-maven-plugin.version>
+        <flatten-maven-plugin.version>1.2.5</flatten-maven-plugin.version>
     </properties>
 
     <dependencies>

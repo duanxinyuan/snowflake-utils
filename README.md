@@ -11,7 +11,7 @@ Twitter的雪花算法，用于生成分布式Id
 <dependency>
     <groupId>com.github.duanxinyuan</groupId>
     <artifactId>util-snowflake</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
 </dependency>
 ```
 
@@ -28,7 +28,7 @@ Twitter的雪花算法，用于生成分布式Id
 <dependency>
     <groupId>com.github.duanxinyuan</groupId>
     <artifactId>util-snowflake-prefect</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
 </dependency>
 ```
 

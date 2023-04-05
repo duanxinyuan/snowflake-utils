@@ -54,7 +54,7 @@
         <commons-codec.version>1.14</commons-codec.version>
         <commons-lang3.version>3.10</commons-lang3.version>
 
-        <snakeyaml.version>1.32</snakeyaml.version>
+        <snakeyaml.version>2.0</snakeyaml.version>
         <commons-configuration2.version>2.7</commons-configuration2.version>
 
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
